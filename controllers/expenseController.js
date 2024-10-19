@@ -1,7 +1,8 @@
-// Import necessary models
 const Expense = require('../models/Expense');
 const User = require('../models/User');
 const mongoose = require('mongoose');
+const { Parser } = require('json2csv');
+const fs = require('fs').promises;
 
 // Add a new expense
 const addExpense = async (req, res) => {
@@ -10,23 +11,20 @@ const addExpense = async (req, res) => {
   try {
     // Validate participants
     for (let participant of participants) {
-      // Check if user_id is a valid ObjectId
       if (!mongoose.Types.ObjectId.isValid(participant.user_id)) {
         return res.status(400).json({ msg: `Invalid user_id: ${participant.user_id}` });
       }
 
-      // Check if amount is provided
       if (split_method === 'exact' && (participant.amount === undefined || participant.amount === null)) {
         return res.status(400).json({ msg: 'Amount is required for each participant when using exact split.' });
       }
 
-      // Validate percentage if using percentage split
       if (split_method === 'percentage' && (!participant.percentage || participant.percentage <= 0)) {
         return res.status(400).json({ msg: 'Percentage must be provided and greater than 0 for each participant.' });
       }
     }
 
-    // If split method is percentage, validate that percentages sum up to 100
+    // Validate that percentages sum to 100 if using 'percentage' split
     if (split_method === 'percentage') {
       const totalPercentage = participants.reduce((acc, p) => acc + (p.percentage || 0), 0);
       if (totalPercentage !== 100) {
@@ -34,7 +32,7 @@ const addExpense = async (req, res) => {
       }
     }
 
-    // Create new expense
+    // Create and save the new expense
     const expense = new Expense({ description, total_amount, split_method, participants });
     await expense.save();
 
@@ -45,7 +43,7 @@ const addExpense = async (req, res) => {
   }
 };
 
-// Retrieve expenses by user ID
+// Retrieve individual expenses for a specific user
 const getUserExpenses = async (req, res) => {
   try {
     const expenses = await Expense.find({ "participants.user_id": req.params.user_id });
@@ -56,7 +54,7 @@ const getUserExpenses = async (req, res) => {
   }
 };
 
-// Retrieve all expenses
+// Retrieve overall expenses for all users
 const getAllExpenses = async (req, res) => {
   try {
     const expenses = await Expense.find();
@@ -67,24 +65,68 @@ const getAllExpenses = async (req, res) => {
   }
 };
 
-// Download balance sheet
-const downloadBalanceSheet = (req, res) => {
-  const userId = req.params.user_id;
+// Download the balance sheet
+const downloadBalanceSheet = async (req, res) => {
+  const userId = req.params.user_id ? req.params.user_id.trim() : null;
 
-  // Example balance sheet data (you'll need to customize this based on your actual app logic)
-  const balanceSheet = {
-    userId: userId,
-    expenses: [
-      { description: "Dinner", amount: 1000 },
-      { description: "Movie", amount: 500 },
-    ],
-    total: 1500
-  };
+  try {
+    let expenses;
+    if (userId) {
+      if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({ msg: 'Invalid user ID' });
+      }
 
-  res.json(balanceSheet); // Send the balance sheet as JSON
+      expenses = await Expense.find({ "participants.user_id": userId });
+
+      if (expenses.length === 0) {
+        return res.status(404).json({ msg: 'No expenses found for this user' });
+      }
+    } else {
+      expenses = await Expense.find();
+      if (expenses.length === 0) {
+        return res.status(404).json({ msg: 'No expenses found' });
+      }
+    }
+
+    // Prepare the CSV data
+    const csvData = expenses.flatMap(expense =>
+      expense.participants.map(participant => ({
+        description: expense.description,
+        total_amount: expense.total_amount,
+        split_method: expense.split_method,
+        user_id: participant.user_id,
+        amount: participant.amount || '',
+        percentage: participant.percentage || ''
+      }))
+    );
+
+    // Define CSV fields
+    const fields = ['description', 'total_amount', 'split_method', 'user_id', 'amount', 'percentage'];
+    const json2csvParser = new Parser({ fields });
+    const csv = json2csvParser.parse(csvData);
+
+    // Define file path and write to file
+    const fileName = userId ? `balance_sheet_${userId}.csv` : 'balance_sheet_all_users.csv';
+    const filePath = `${fileName}`;
+    await fs.writeFile(filePath, csv);
+
+    // Send the file for download
+    res.download(filePath, (err) => {
+      if (err) {
+        console.error("Error downloading the file:", err);
+        return res.status(500).send('Error downloading file');
+      }
+
+      // Delete file after it's sent
+      fs.unlink(filePath).catch(err => console.error("Error deleting the file:", err));
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server error');
+  }
 };
 
-// Export all the controllers as a module
+// Export all controllers
 module.exports = {
   addExpense,
   getUserExpenses,
