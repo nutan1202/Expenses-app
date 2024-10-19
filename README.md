@@ -62,33 +62,33 @@ Follow these steps to set up your development environment:
 Check out the following Postman screenshots to see the API endpoints in action!
 
 <div style="margin-bottom: 20px;">
+    <p style="font-weight: bold;">Creating user</p>
     <img src="image/1.png" alt="Creating user" style="max-width: 100%; height: auto;">
-    <p>Creating user</p>
 </div>
 
 <div style="margin-bottom: 20px;">
+    <p style="font-weight: bold;">Creating expense using exact</p>
     <img src="image/2.png" alt="Creating expense using exact" style="max-width: 100%; height: auto;">
-    <p>Creating expense using exact</p>
 </div>
 
 <div style="margin-bottom: 20px;">
+    <p style="font-weight: bold;">Creating expense using percentage</p>
     <img src="image/3.png" alt="Creating expense using percentage" style="max-width: 100%; height: auto;">
-    <p>Creating expense using percentage</p>
 </div>
 
 <div style="margin-bottom: 20px;">
+    <p style="font-weight: bold;">Retrieving expenses for a particular user</p>
     <img src="image/4.png" alt="Retrieving expenses for a particular user" style="max-width: 100%; height: auto;">
-    <p>Retrieving expenses for a particular user</p>
 </div>
 
 <div style="margin-bottom: 20px;">
+    <p style="font-weight: bold;">Balance Sheet Download</p>
     <img src="image/5.png" alt="Balance Sheet Download" style="max-width: 100%; height: auto;">
-    <p>Balance Sheet Download</p>
 </div>
 
 <div style="margin-bottom: 20px;">
+    <p style="font-weight: bold;">Balance Sheet Headers</p>
     <img src="image/6.png" alt="Balance Sheet Headers" style="max-width: 100%; height: auto;">
-    <p>Balance Sheet Headers</p>
 </div>
 
 
