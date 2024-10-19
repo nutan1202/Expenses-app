@@ -61,7 +61,7 @@ Follow these steps to set up your development environment:
 
 Check out the following Postman screenshots to see the API endpoints in action!
 
-![Creating user](images/1.png)
+![Creating user](image/1.png)
 ![Creating expense using exact](image/2.png)
 ![Creating expense using percentage](image/3.png)
 ![Retrieving expenses for a particular user](image/4.png)
