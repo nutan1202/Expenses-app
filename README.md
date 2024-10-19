@@ -61,33 +61,35 @@ Follow these steps to set up your development environment:
 
 Check out the following Postman screenshots to see the API endpoints in action!
 
-![Creating user](images/1.png)
-*Creating user*
+<div style="margin-bottom: 20px;">
+    <img src="image/1.png" alt="Creating user" style="max-width: 100%; height: auto;">
+    <p>Creating user</p>
+</div>
 
-<br>
+<div style="margin-bottom: 20px;">
+    <img src="image/2.png" alt="Creating expense using exact" style="max-width: 100%; height: auto;">
+    <p>Creating expense using exact</p>
+</div>
 
-![Creating expense using exact](images/2.png)
-*Creating expense using exact*
+<div style="margin-bottom: 20px;">
+    <img src="image/3.png" alt="Creating expense using percentage" style="max-width: 100%; height: auto;">
+    <p>Creating expense using percentage</p>
+</div>
 
-<br>
+<div style="margin-bottom: 20px;">
+    <img src="image/4.png" alt="Retrieving expenses for a particular user" style="max-width: 100%; height: auto;">
+    <p>Retrieving expenses for a particular user</p>
+</div>
 
-![Creating expense using percentage](images/3.png)
-*Creating expense using percentage*
+<div style="margin-bottom: 20px;">
+    <img src="image/5.png" alt="Balance Sheet Download" style="max-width: 100%; height: auto;">
+    <p>Balance Sheet Download</p>
+</div>
 
-<br>
-
-![Retrieving expenses for a particular user](images/4.png)
-*Retrieving expenses for a particular user*
-
-<br>
-
-![Balance Sheet Download](images/5.png)
-*Balance Sheet Download*
-
-<br>
-
-![Balance Sheet Headers](images/6.png)
-*Balance Sheet Headers*
+<div style="margin-bottom: 20px;">
+    <img src="image/6.png" alt="Balance Sheet Headers" style="max-width: 100%; height: auto;">
+    <p>Balance Sheet Headers</p>
+</div>
 
 
 ## Contact
